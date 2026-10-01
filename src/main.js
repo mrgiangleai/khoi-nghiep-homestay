@@ -425,8 +425,10 @@ function tick(now) {
 const threeScene = new THREE.Scene();
 threeScene.fog = new THREE.Fog(0xd6e9df, 16, 34);
 const camera = new THREE.OrthographicCamera(-8, 8, 6, -6, 0.1, 100);
-camera.position.set(11, 9, 13);
-camera.lookAt(0, 1.4, 0);
+// Front-facing camera: keep the house and the character centered like a small
+// stage, while the depth axis remains available for 2.5D shadows and layering.
+camera.position.set(0, 3.35, 22);
+camera.lookAt(0, 3.35, 0);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
 renderer.shadowMap.enabled = true;
@@ -539,15 +541,15 @@ function createGuestModel(index) {
 function beginGuestArrival(room) {
   removeGuestActor(room.id);
   const roomIndex = state.rooms.findIndex((item) => item.id === room.id);
-  const targetX = ROOM_POSITIONS[roomIndex] * .42;
-  const startX = targetX + (roomIndex === 0 ? -2.5 : 2.5);
+  const targetX = ROOM_POSITIONS[roomIndex];
+  const startX = roomIndex === 0 ? -6.4 : 6.4;
   const group = createGuestModel(roomIndex);
   const actor = {
     group,
     guestName: room.guest?.name || 'Khách mới',
     roomName: room.name,
-    start: new THREE.Vector3(startX, 0, 7.3),
-    target: new THREE.Vector3(targetX, 0, 3.55),
+    start: new THREE.Vector3(startX, 0, 4.35),
+    target: new THREE.Vector3(targetX, 0, 3.65),
     startedAt: performance.now(),
     duration: 5000,
     arrived: false,
