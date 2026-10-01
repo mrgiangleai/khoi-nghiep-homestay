@@ -247,3 +247,28 @@ h2, h3 { letter-spacing: -0.035em; }
   .dock-icon { font-size: 14px; }
   .footer-note { gap: 5px; margin-top: 8px; font-size: 8px; }
 }
+
+/* Front-house interaction and guest dialogue. */
+.house-hotspot { position: absolute; z-index: 2; top: 20%; left: 25%; width: 50%; height: 57%; border: 1px solid transparent; border-radius: 24px; background: transparent; cursor: pointer; }
+.house-hotspot::after { content: '🔍  Bấm để xem phòng'; position: absolute; left: 50%; bottom: 10px; transform: translate(-50%, 5px); padding: 7px 10px; border-radius: 99px; color: var(--green-dark); background: rgba(255, 253, 249, .9); box-shadow: var(--small-shadow); font-size: 10px; font-weight: 700; opacity: 0; transition: opacity .2s ease, transform .2s ease; white-space: nowrap; }
+.house-hotspot:hover, .house-hotspot:focus-visible { border-color: rgba(104, 142, 115, .32); background: rgba(255, 253, 249, .08); outline: 0; }
+.house-hotspot:hover::after, .house-hotspot:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+.room-picker { position: absolute; z-index: 6; top: 50%; left: 50%; width: min(340px, calc(100% - 32px)); transform: translate(-50%, -50%); padding: 14px; border: 1px solid rgba(228, 221, 209, .95); border-radius: 18px; background: rgba(255, 253, 249, .96); box-shadow: 0 18px 40px rgba(67, 57, 45, .18); }
+.room-picker[hidden] { display: none; }
+.room-picker-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.room-picker-header strong, .room-picker-header span { display: block; }.room-picker-header strong { font-size: 13px; }.room-picker-header span { margin-top: 3px; color: var(--muted); font-size: 9px; }
+.room-picker-close { width: 26px; height: 26px; border: 0; border-radius: 8px; color: var(--muted); background: var(--paper); cursor: pointer; font-size: 18px; line-height: 1; }
+.room-picker-options { display: grid; gap: 7px; }.room-picker-option { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 8px; width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 11px; text-align: left; background: var(--white); cursor: pointer; }.room-picker-option:hover { border-color: var(--green); background: var(--green-soft); }.room-picker-option-icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--paper-deep); font-size: 15px; }.room-picker-option strong, .room-picker-option small { display: block; }.room-picker-option strong { font-size: 10px; }.room-picker-option small { margin-top: 2px; overflow: hidden; color: var(--muted); font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }.room-picker-option em { font-style: normal; }
+.host-dialogue { position: absolute; z-index: 5; bottom: 105px; left: 50%; display: flex; align-items: center; gap: 7px; max-width: min(360px, calc(100% - 32px)); padding: 8px 11px; transform: translate(-50%, 8px); border: 1px solid rgba(104, 142, 115, .2); border-radius: 14px 14px 14px 4px; color: var(--green-dark); background: rgba(255, 253, 249, .94); box-shadow: var(--small-shadow); font-size: 10px; line-height: 1.35; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+.host-dialogue[hidden] { display: none; }.host-dialogue.is-visible { opacity: 1; transform: translate(-50%, 0); }.host-dialogue-avatar { display: grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px; border-radius: 8px; background: var(--orange-soft); font-size: 13px; }
+
+@media (max-width: 600px) {
+  .house-hotspot { top: 20%; left: 23%; width: 54%; height: 58%; }
+  .house-hotspot::after { padding: 5px 7px; font-size: 8px; }
+  .room-picker { width: min(300px, calc(100% - 22px)); padding: 11px; border-radius: 14px; }
+  .room-picker-option { grid-template-columns: 26px minmax(0, 1fr) auto; gap: 6px; padding: 6px; }
+  .room-picker-option-icon { width: 26px; height: 26px; font-size: 13px; }
+  .room-picker-option strong { font-size: 9px; }.room-picker-option small { font-size: 7px; }.room-picker-option .room-status { padding: 3px 5px; font-size: 7px; }
+  .host-dialogue { bottom: 82px; max-width: calc(100% - 22px); padding: 6px 8px; font-size: 8px; }
+  .host-dialogue-avatar { flex-basis: 20px; width: 20px; height: 20px; font-size: 11px; }
+}

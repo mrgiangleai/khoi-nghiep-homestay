@@ -73,17 +73,32 @@
       <section class="game-layout">
         <div class="scene-card">
           <div id="scene" class="scene" aria-label="Cảnh homestay 2.5D"></div>
+          <button id="house-hotspot" class="house-hotspot" data-action="open-room-picker" type="button" aria-label="Bấm để xem phòng trong Nhà Mây"></button>
           <div class="scene-overlay scene-title">
             <span class="location-pill">📍 Đồi Mây Nhỏ</span>
             <h2>Nhà Mây</h2>
             <p>Một khởi đầu nhỏ cho giấc mơ lớn.</p>
           </div>
+          <div id="room-picker" class="room-picker" role="dialog" aria-modal="false" aria-labelledby="room-picker-title" hidden>
+            <div class="room-picker-header">
+              <div>
+                <strong id="room-picker-title">Xem phòng Nhà Mây</strong>
+                <span>Chọn phòng muốn kiểm tra</span>
+              </div>
+              <button class="room-picker-close" data-action="close-room-picker" type="button" aria-label="Đóng">×</button>
+            </div>
+            <div id="room-picker-options" class="room-picker-options"></div>
+          </div>
           <div id="arrival-event" class="arrival-event" role="status" aria-live="polite">
             <span class="arrival-icon">🚶</span>
             <div>
-              <strong>Khách đang tới</strong>
+              <strong id="arrival-event-title">Khách đang tới</strong>
               <span id="arrival-event-copy">Đang đi về phía Nhà Mây...</span>
             </div>
+          </div>
+          <div id="host-dialogue" class="host-dialogue" role="status" aria-live="polite" hidden>
+            <span class="host-dialogue-avatar">👩</span>
+            <span id="host-dialogue-copy"></span>
           </div>
           <div id="toast" class="toast" role="status"></div>
           <div class="scene-legend">
