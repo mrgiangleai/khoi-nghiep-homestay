@@ -15,7 +15,7 @@ Mở [http://localhost:8000/homestay-2d/](http://localhost:8000/homestay-2d/).
 ## Nội dung game
 
 - Canvas 2D thuần, không dùng Three.js.
-- Nền cảnh minh họa 2D vẽ tay tại `assets/homestay-scene.png`, có marker phòng động.
+- Nền cảnh 2D anime dễ thương tại `assets/homestay-scene.png`, có marker phòng động.
 - Trên màn hình rộng dùng nền ngang; trên iPhone tự chuyển sang `assets/homestay-scene-portrait.png` theo tỷ lệ 9:16.
 - Hai phòng, vốn khởi điểm 100 triệu đồng, một ngày game dài 48 giây.
 - Mỗi ngày có lịch khách ngẫu nhiên từ 14:00 đến 21:30; khách trả phòng vào buổi sáng ngày kế tiếp.

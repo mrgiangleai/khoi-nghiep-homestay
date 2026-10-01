@@ -20,7 +20,7 @@ Sau đó truy cập `http://localhost:8000/`.
 - Khách trả phòng vào buổi sáng hôm sau; doanh thu được ghi đúng lúc trả phòng.
 - Phòng sau checkout cần dọn; có thể tự dọn hoặc thuê người dọn.
 - Có nâng cấp tiện nghi, marketing, sổ sách và tự lưu bằng `localStorage`.
-- Nền cảnh ngang và ảnh dọc 9:16 cho màn hình iPhone.
+- Toàn bộ ảnh cảnh dùng phong cách 2D anime dễ thương; có bản ngang và bản dọc 9:16 cho màn hình iPhone.
 
 ## Bản 2.5D cũ
 
