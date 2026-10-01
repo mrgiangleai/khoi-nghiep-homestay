@@ -17,7 +17,7 @@ Sau đó truy cập `http://localhost:8000`.
 - Vốn ban đầu: 100.000.000 ₫.
 - Một căn nhà với hai phòng cơ bản.
 - Giá thuê ban đầu: 200.000 ₫/ngày/phòng.
-- Một ngày trong game kéo dài 24 giây.
+- Một ngày trong game kéo dài 48 giây (2 giây = 1 giờ game).
 - Khách check-in sau 14:00 và check-out trước 12:00 ngày tiếp theo.
 - Phòng sau checkout bắt buộc phải được dọn.
 - Có thể tự dọn hoặc thuê người dọn.

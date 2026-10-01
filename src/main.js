@@ -2,6 +2,8 @@ import * as THREE from 'three';
 
 const BASE_RENT = 200_000;
 const DAY_HOURS = 24;
+const DAY_DURATION_SECONDS = 48;
+const GAME_HOURS_PER_REAL_SECOND = DAY_HOURS / DAY_DURATION_SECONDS;
 const INITIAL_MONEY = 100_000_000;
 
 const UPGRADE_CATALOG = [
@@ -564,7 +566,7 @@ function tick(now) {
   const deltaSeconds = Math.min(0.2, (now - lastFrame) / 1000);
   lastFrame = now;
   if (state.running && state.phase === 'running') {
-    state.hour += deltaSeconds;
+    state.hour += deltaSeconds * GAME_HOURS_PER_REAL_SECOND;
     processRoomEvents();
     if (state.hour >= DAY_HOURS) finishDay();
     renderHeader();
