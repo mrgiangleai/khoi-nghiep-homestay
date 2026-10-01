@@ -414,7 +414,7 @@ const camera = new THREE.OrthographicCamera(-8, 8, 6, -6, 0.1, 100);
 camera.position.set(11, 9, 13);
 camera.lookAt(0, 1.4, 0);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 ui.scene.appendChild(renderer.domElement);
@@ -523,7 +523,7 @@ function resizeScene() {
   const width = Math.max(1, ui.scene.clientWidth);
   const height = Math.max(1, ui.scene.clientHeight);
   const aspect = width / height;
-  const viewHeight = 11.3;
+  const viewHeight = width < 600 ? 10.4 : 11.3;
   camera.left = -viewHeight * aspect / 2;
   camera.right = viewHeight * aspect / 2;
   camera.top = viewHeight / 2;
