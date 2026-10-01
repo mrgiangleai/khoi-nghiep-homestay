@@ -262,6 +262,9 @@ h2, h3 { letter-spacing: -0.035em; }
 .host-dialogue { position: absolute; z-index: 5; bottom: 105px; left: 50%; display: flex; align-items: center; gap: 7px; max-width: min(360px, calc(100% - 32px)); padding: 8px 11px; transform: translate(-50%, 8px); border: 1px solid rgba(104, 142, 115, .2); border-radius: 14px 14px 14px 4px; color: var(--green-dark); background: rgba(255, 253, 249, .94); box-shadow: var(--small-shadow); font-size: 10px; line-height: 1.35; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
 .host-dialogue[hidden] { display: none; }.host-dialogue.is-visible { opacity: 1; transform: translate(-50%, 0); }.host-dialogue-avatar { display: grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px; border-radius: 8px; background: var(--orange-soft); font-size: 13px; }
 
+.roof-day-button { position: absolute; z-index: 7; top: 26%; left: 50%; min-height: 0; transform: translateX(-50%); }
+.roof-day-button:hover:not(:disabled) { transform: translateX(-50%); }
+
 @media (max-width: 600px) {
   .house-hotspot { top: 20%; left: 23%; width: 54%; height: 58%; }
   .house-hotspot::after { padding: 5px 7px; font-size: 8px; }
@@ -321,4 +324,55 @@ h2, h3 { letter-spacing: -0.035em; }
   .panel-modal-close { width: 27px; height: 27px; border: 0; border-radius: 8px; color: var(--muted); background: var(--paper); cursor: pointer; font-size: 18px; line-height: 1; }
   .panel-modal-content { min-height: 0; overflow: auto; padding: 12px; }
   .panel-modal-content .panel-heading { padding-bottom: 10px; }.panel-modal-content .panel-body { padding-top: 10px; }.panel-modal-content .panel-scroll { max-height: none; overflow: visible; }
+}
+
+/* Full-screen phone stage: the house and guests are the home screen; management opens in popups. */
+@media (max-width: 600px) {
+  #app { position: relative; width: 390px; height: 844px; min-height: 844px; max-height: 844px; padding: 0; }
+
+  .topbar { position: absolute; z-index: 10; top: 8px; right: 8px; left: 8px; display: flex; justify-content: flex-end; gap: 0; pointer-events: none; }
+  .brand-lockup { display: none; }
+  .top-stats { display: flex; width: auto; gap: 4px; pointer-events: auto; }
+  .stat-chip, .money-chip { min-width: 0; padding: 4px 6px; gap: 4px; border-color: rgba(255, 255, 255, .58); border-radius: 9px; background: rgba(255, 253, 249, .78); box-shadow: 0 4px 12px rgba(67, 57, 45, .08); }
+  .stat-icon { width: 18px; height: 18px; border-radius: 5px; font-size: 10px; }
+  .stat-label { display: none; }
+  .stat-chip strong { margin: 0; font-size: 8px; }
+
+  .status-bar { position: absolute; z-index: 10; top: 43px; right: 8px; left: 8px; display: flex; justify-content: flex-start; width: auto; margin: 0; padding: 5px 7px; gap: 5px; border-color: rgba(255, 255, 255, .5); border-radius: 8px; background: rgba(255, 253, 249, .67); box-shadow: 0 4px 12px rgba(67, 57, 45, .05); font-size: 7px; pointer-events: none; }
+  .status-copy { min-width: 0; gap: 5px; }
+  .status-copy strong { overflow: hidden; color: var(--ink); font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+  .status-copy span:last-child, .status-hints { display: none; }
+  .phase-dot { flex: 0 0 5px; width: 5px; height: 5px; box-shadow: 0 0 0 2px var(--yellow-soft); }
+  .phase-dot.is-live { box-shadow: 0 0 0 2px var(--green-soft); }
+  .phase-dot.is-prepare { box-shadow: 0 0 0 2px var(--orange-soft); }
+  .phase-dot.is-idle { box-shadow: 0 0 0 2px #edf0ef; }
+
+  .game-layout { position: absolute; z-index: 0; inset: 0; display: block; }
+  .scene-card { position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+  .scene { width: 100%; height: 100%; min-height: 0; }
+  .management-card { display: none; }
+
+  .scene-title { top: 86px; left: 11px; }
+  .location-pill { padding: 4px 6px; border-radius: 99px; font-size: 7px; }
+  .scene-title h2 { margin: 5px 0 0; font-size: 24px; }
+  .scene-title p { display: none; }
+
+  .roof-day-button { top: 20%; padding: 6px 10px; border-radius: 99px; font-size: 8px; box-shadow: 0 5px 12px rgba(216, 137, 94, .25); }
+
+  .arrival-event { top: 78px; right: 8px; max-width: 142px; gap: 5px; padding: 5px 6px; border-radius: 9px; }
+  .arrival-icon { flex-basis: 20px; width: 20px; height: 20px; border-radius: 6px; font-size: 10px; }
+  .arrival-event strong { font-size: 7px; }
+  .arrival-event div span { margin-top: 1px; font-size: 7px; }
+
+  .scene-legend { right: 8px; bottom: 62px; gap: 5px; padding: 5px 6px; border-radius: 8px; font-size: 0; }
+  .legend-dot { width: 7px; height: 7px; margin-right: 0; }
+  .host-dialogue { bottom: 62px; max-width: calc(100% - 20px); padding: 5px 7px; border-radius: 10px 10px 10px 3px; font-size: 7px; }
+  .host-dialogue-avatar { flex-basis: 18px; width: 18px; height: 18px; border-radius: 6px; font-size: 10px; }
+  .toast { bottom: 61px; max-width: calc(100% - 28px); padding: 6px 9px; border-radius: 8px; font-size: 8px; }
+
+  .action-dock { position: absolute; z-index: 10; right: 8px; bottom: 8px; left: 8px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; margin: 0; padding: 4px; border-color: rgba(255, 255, 255, .6); border-radius: 12px; background: rgba(255, 253, 249, .82); backdrop-filter: blur(12px); }
+  .dock-button { min-height: 42px; height: 42px; padding: 5px 2px; border-radius: 9px; font-size: 0; }
+  .dock-button > span:not(.dock-icon) { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  .dock-icon { font-size: 16px; line-height: 1; }
+  .footer-note { display: none; }
 }
