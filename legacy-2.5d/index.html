@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f3eee4" />
+    <meta
+      name="description"
+      content="Khởi Nghiệp Homestay - game quản lý kinh doanh homestay 2.5D"
+    />
+    <title>Khởi Nghiệp Homestay</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.169.0/build/three.module.js"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <main id="app">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark">🏡</div>
+          <div>
+            <p class="eyebrow">STUDIO MỞ CỬA</p>
+            <h1>Khởi Nghiệp Homestay</h1>
+          </div>
+        </div>
+
+        <div class="top-stats" aria-label="Thông tin kinh doanh">
+          <div class="stat-chip money-chip">
+            <span class="stat-icon">💰</span>
+            <div>
+              <span class="stat-label">Ngân sách</span>
+              <strong id="money-value">100.000.000 ₫</strong>
+            </div>
+          </div>
+          <div class="stat-chip">
+            <span class="stat-icon">🗓️</span>
+            <div>
+              <span class="stat-label">Ngày</span>
+              <strong id="day-value">1</strong>
+            </div>
+          </div>
+          <div class="stat-chip">
+            <span class="stat-icon">⏱️</span>
+            <div>
+              <span class="stat-label">Thời gian</span>
+              <strong id="clock-value">00:00</strong>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="status-bar" aria-live="polite">
+        <div class="status-copy">
+          <span id="phase-dot" class="phase-dot is-idle"></span>
+          <strong id="phase-label">Chuẩn bị khai trương</strong>
+          <span id="phase-description">Bạn đang có một căn nhà và hai phòng trống.</span>
+        </div>
+        <div class="status-hints">
+          <span>48 giây = 24 giờ trong game</span>
+          <span class="hint-divider">•</span>
+          <span id="marketing-status">Chưa chạy marketing</span>
+        </div>
+      </section>
+
+      <section class="game-layout">
+        <div class="scene-card">
+          <div id="scene" class="scene" aria-label="Cảnh homestay 2.5D"></div>
+          <button id="house-hotspot" class="house-hotspot" data-action="open-room-picker" type="button" aria-label="Bấm để xem phòng trong Nhà Mây"></button>
+          <button id="next-day-button" class="primary-button next-day-button roof-day-button" type="button" hidden>
+            Bắt đầu ngày mới
+          </button>
+          <div class="scene-overlay scene-title">
+            <span class="location-pill">📍 Đồi Mây Nhỏ</span>
+            <h2>Nhà Mây</h2>
+            <p>Một khởi đầu nhỏ cho giấc mơ lớn.</p>
+          </div>
+          <div id="room-picker" class="room-picker" role="dialog" aria-modal="false" aria-labelledby="room-picker-title" hidden>
+            <div class="room-picker-header">
+              <div>
+                <strong id="room-picker-title">Xem phòng Nhà Mây</strong>
+                <span>Chọn phòng muốn kiểm tra</span>
+              </div>
+              <button class="room-picker-close" data-action="close-room-picker" type="button" aria-label="Đóng">×</button>
+            </div>
+            <div id="room-picker-options" class="room-picker-options"></div>
+          </div>
+          <div id="arrival-event" class="arrival-event" role="status" aria-live="polite">
+            <span class="arrival-icon">🚶</span>
+            <div>
+              <strong id="arrival-event-title">Khách đang tới</strong>
+              <span id="arrival-event-copy">Đang đi về phía Nhà Mây...</span>
+            </div>
+          </div>
+          <div id="host-dialogue" class="host-dialogue" role="status" aria-live="polite" hidden>
+            <span class="host-dialogue-avatar">👩</span>
+            <span id="host-dialogue-copy"></span>
+          </div>
+          <div id="toast" class="toast" role="status"></div>
+          <div class="scene-legend">
+            <span><i class="legend-dot guest-dot"></i> Có khách</span>
+            <span><i class="legend-dot clean-dot"></i> Sẵn sàng</span>
+            <span><i class="legend-dot dirty-dot"></i> Cần dọn</span>
+          </div>
+        </div>
+
+        <aside class="management-card">
+          <div id="panel-content" class="panel-content"></div>
+        </aside>
+      </section>
+
+      <nav class="action-dock" aria-label="Quản lý homestay">
+        <button class="dock-button is-active" data-action="open-panel" data-panel="overview" type="button" aria-label="Tổng quan" title="Tổng quan">
+          <span class="dock-icon">🏠</span>
+          <span>Tổng quan</span>
+        </button>
+        <button class="dock-button" data-action="open-panel" data-panel="shop" type="button" aria-label="Shop" title="Shop">
+          <span class="dock-icon">🛒</span>
+          <span>Shop</span>
+        </button>
+        <button class="dock-button" data-action="open-panel" data-panel="items" type="button" aria-label="Vật phẩm" title="Vật phẩm">
+          <span class="dock-icon">🪑</span>
+          <span>Vật phẩm</span>
+        </button>
+        <button class="dock-button" data-action="open-panel" data-panel="cleaning" type="button" aria-label="Dọn dẹp" title="Dọn dẹp">
+          <span class="dock-icon">🧹</span>
+          <span>Dọn dẹp</span>
+        </button>
+        <button class="dock-button" data-action="open-panel" data-panel="marketing" type="button" aria-label="Marketing" title="Marketing">
+          <span class="dock-icon">📣</span>
+          <span>Marketing</span>
+        </button>
+        <button class="dock-button" data-action="open-panel" data-panel="revenue" type="button" aria-label="Doanh thu" title="Doanh thu">
+          <span class="dock-icon">📈</span>
+          <span>Doanh thu</span>
+        </button>
+      </nav>
+
+      <footer class="footer-note">
+        <span>Prototype 01</span>
+        <span>•</span>
+        <span>Phiên chơi hiện tại sẽ bắt đầu lại khi tải lại trang</span>
+      </footer>
+    </main>
+
+    <div id="panel-modal" class="panel-modal-backdrop" role="presentation" hidden>
+      <section class="panel-modal-card" role="dialog" aria-modal="true" aria-labelledby="panel-modal-title">
+        <div class="panel-modal-toolbar">
+          <span id="panel-modal-title">Quản lý homestay</span>
+          <button class="panel-modal-close" data-action="close-panel-modal" type="button" aria-label="Đóng cửa sổ">×</button>
+        </div>
+        <div id="panel-modal-content" class="panel-modal-content"></div>
+      </section>
+    </div>
+
+    <div id="onboarding" class="modal-backdrop">
+      <section class="onboarding-card" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
+        <div class="onboarding-illustration" aria-hidden="true">
+          <span class="cloud cloud-one"></span>
+          <span class="cloud cloud-two"></span>
+          <span class="mini-house">🏡</span>
+          <span class="mini-sparkle sparkle-one">✦</span>
+          <span class="mini-sparkle sparkle-two">✦</span>
+        </div>
+        <p class="eyebrow">CHƯƠNG 01 · BẮT ĐẦU NHỎ</p>
+        <h2 id="onboarding-title">Chào mừng bạn đến với Nhà Mây</h2>
+        <p class="onboarding-copy">
+          Bạn có <strong>100 triệu đồng</strong>, một căn nhà nhỏ và hai phòng đang chờ được đón những vị khách đầu tiên.
+          Hãy chuẩn bị căn phòng, thu hút khách và biến Nhà Mây thành một homestay đáng nhớ.
+        </p>
+        <div class="starter-grid">
+          <div><strong>100 triệu</strong><span>vốn khởi nghiệp</span></div>
+          <div><strong>02 phòng</strong><span>đã sẵn sàng</span></div>
+          <div><strong>200.000 ₫</strong><span>giá thuê cơ bản/ngày</span></div>
+        </div>
+        <div class="onboarding-tip">
+          <span>💡</span>
+          <p>Sau mỗi ngày, bạn sẽ có thời gian chuẩn bị nâng cấp, marketing và dọn phòng trước khi mở cửa lại.</p>
+        </div>
+        <button id="start-game-button" class="primary-button wide-button" type="button">Mở cửa ngày đầu tiên</button>
+      </section>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

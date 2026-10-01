@@ -1,31 +1,31 @@
-# Khởi Nghiệp Homestay
+# Nhà Nhỏ 2D · Quản lý homestay
 
-Prototype game quản lý kinh doanh homestay 2.5D sử dụng Three.js.
+Game quản lý homestay 2D độc lập. Bản đang chạy ở thư mục gốc đã thay cho bản 2.5D cũ.
 
 ## Chạy local
 
-Vì game sử dụng ES module và import Three.js từ CDN, cần mở bằng một static server thay vì mở trực tiếp bằng `file://`:
+Game dùng ES module, nên cần mở bằng static server thay vì `file://`:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Sau đó truy cập `http://localhost:8000`.
+Sau đó truy cập `http://localhost:8000/`.
 
-## Gameplay hiện tại
+## Gameplay
 
 - Vốn ban đầu: 100.000.000 ₫.
-- Một căn nhà với hai phòng cơ bản.
-- Giá thuê ban đầu: 200.000 ₫/ngày/phòng.
-- Một ngày trong game kéo dài 48 giây (2 giây = 1 giờ game).
-- Khách check-in sau 14:00 và check-out trước 12:00 ngày tiếp theo.
-- Phòng sau checkout bắt buộc phải được dọn.
-- Có thể tự dọn hoặc thuê người dọn.
-- Có nâng cấp vật phẩm, marketing và sổ doanh thu.
-- Shop mở rộng nhà đang ở trạng thái Coming Soon.
+- Canvas 2D thuần, hai phòng, vốn ban đầu 100.000.000 ₫.
+- Một ngày game dài 48 giây; lịch khách xuất hiện từ 14:00 đến 21:30.
+- Khách trả phòng vào buổi sáng hôm sau; doanh thu được ghi đúng lúc trả phòng.
+- Phòng sau checkout cần dọn; có thể tự dọn hoặc thuê người dọn.
+- Có nâng cấp tiện nghi, marketing, sổ sách và tự lưu bằng `localStorage`.
+- Nền cảnh ngang và ảnh dọc 9:16 cho màn hình iPhone.
 
-Phiên bản prototype chưa lưu tiến trình. GitHub Pages là static hosting nên Git chỉ lưu source code, không nhận dữ liệu phiên chơi trực tiếp từ trình duyệt.
+## Bản 2.5D cũ
+
+Bản cũ được giữ nguyên tại [`legacy-2.5d/`](./legacy-2.5d/), gồm source Three.js trước khi chuyển sang bản 2D.
 
 ## GitHub Pages
 
-Repository có workflow tại `.github/workflows/deploy-pages.yml`. Sau khi bật GitHub Pages dùng GitHub Actions trong phần Settings, mỗi lần push lên `main` hoặc `master` sẽ triển khai lại game.
+Workflow triển khai nằm tại `.github/workflows/deploy-pages.yml`. Push lên `master` hoặc `main` sẽ triển khai lại game.
