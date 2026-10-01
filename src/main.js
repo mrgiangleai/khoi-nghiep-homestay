@@ -42,6 +42,9 @@ const ui = {
   phaseDescription: document.querySelector('#phase-description'),
   marketingStatus: document.querySelector('#marketing-status'),
   panel: document.querySelector('#panel-content'),
+  panelModal: document.querySelector('#panel-modal'),
+  panelModalTitle: document.querySelector('#panel-modal-title'),
+  panelModalContent: document.querySelector('#panel-modal-content'),
   roomPicker: document.querySelector('#room-picker'),
   roomPickerOptions: document.querySelector('#room-picker-options'),
   onboarding: document.querySelector('#onboarding'),
@@ -63,6 +66,7 @@ const state = {
   phase: 'intro',
   running: false,
   activePanel: 'overview',
+  panelOpen: false,
   selectedRoom: 'room-1',
   marketing: { name: '', boost: 0, discount: 0, daysLeft: 0 },
   ledger: [],
@@ -352,7 +356,24 @@ function renderRoomSummary() {
   }).join('');
 }
 
-function renderOverview() {
+function renderCompactOverview() {
+  const occupied = state.rooms.filter((room) => room.status === 'occupied').length;
+  const dirty = state.rooms.filter((room) => room.status === 'dirty').length;
+  const income = state.ledger.filter((item) => item.amount > 0).reduce((sum, item) => sum + item.amount, 0);
+  const roomRows = state.rooms.map((room) => {
+    const status = roomStatusLabel(room);
+    return `<div class="compact-room-row"><span>${room.id === 'room-1' ? '☁️' : '☀️'}</span><strong>${room.name}</strong><small>${room.guest ? room.guest.partyLabel : money(roomRent(room)) + '/ngày'}</small><em class="room-status ${status.className}">${status.label}</em></div>`;
+  }).join('');
+  return `<div class="compact-summary" data-action="open-panel" data-panel="overview" role="button" tabindex="0" aria-label="Mở tổng quan đầy đủ">
+    <div class="panel-heading"><div><h2>Tổng quan nhanh</h2><p>Thông tin chính của Nhà Mây.</p></div><span class="panel-heading-icon">🏡</span></div>
+    <div class="compact-metrics"><div><span>Phòng có khách</span><strong>${occupied}/2</strong></div><div><span>Cần dọn</span><strong>${dirty}</strong></div><div><span>Thu nhập</span><strong>${money(income)}</strong></div></div>
+    <p class="section-label"><span>Trạng thái phòng</span><span>Chạm để xem chi tiết</span></p>
+    <div class="compact-room-list">${roomRows}</div>
+    <div class="compact-open-hint">👆 Bấm vào khu vực này để mở Tổng quan đầy đủ</div>
+  </div>`;
+}
+
+function renderOverviewDetails() {
   const occupied = state.rooms.filter((room) => room.status === 'occupied').length;
   const dirty = state.rooms.filter((room) => room.status === 'dirty').length;
   const income = state.ledger.filter((item) => item.amount > 0).reduce((sum, item) => sum + item.amount, 0);
@@ -436,16 +457,62 @@ function selectRoomView(roomId) {
   const room = getRoom(roomId);
   if (!room) return;
   state.selectedRoom = roomId;
-  state.activePanel = 'items';
   closeRoomPicker();
-  renderPanel();
+  openPanelModal('items');
   showToast(`Đang xem ${room.name}. Vật phẩm đã lắp sẽ hiện trên mặt tiền phòng.`);
 }
 
+const panelTitles = {
+  overview: 'Tổng quan',
+  shop: 'Shop',
+  items: 'Vật phẩm',
+  cleaning: 'Dọn dẹp',
+  marketing: 'Marketing',
+  revenue: 'Doanh thu',
+};
+
+function panelRenderer(panelName) {
+  return {
+    overview: renderOverviewDetails,
+    shop: renderShop,
+    items: renderItems,
+    cleaning: renderCleaning,
+    marketing: renderMarketing,
+    revenue: renderRevenue,
+  }[panelName] || renderOverviewDetails;
+}
+
+function setActiveDock(panelName) {
+  document.querySelectorAll('.dock-button').forEach((button) => button.classList.toggle('is-active', button.dataset.panel === panelName));
+}
+
+function renderModalPanel() {
+  if (!state.panelOpen) return;
+  ui.panelModalTitle.textContent = panelTitles[state.activePanel] || 'Quản lý homestay';
+  ui.panelModalContent.innerHTML = panelRenderer(state.activePanel)();
+  setActiveDock(state.activePanel);
+}
+
+function openPanelModal(panelName) {
+  state.activePanel = panelName;
+  state.panelOpen = true;
+  ui.panelModal.hidden = false;
+  ui.panelModal.classList.add('is-visible');
+  renderModalPanel();
+}
+
+function closePanelModal() {
+  state.panelOpen = false;
+  state.activePanel = 'overview';
+  ui.panelModal.classList.remove('is-visible');
+  ui.panelModal.hidden = true;
+  renderPanel();
+}
+
 function renderPanel() {
-  const panels = { overview: renderOverview, shop: renderShop, items: renderItems, cleaning: renderCleaning, marketing: renderMarketing, revenue: renderRevenue };
-  ui.panel.innerHTML = panels[state.activePanel]();
-  document.querySelectorAll('.dock-button').forEach((button) => button.classList.toggle('is-active', button.dataset.panel === state.activePanel));
+  ui.panel.innerHTML = renderCompactOverview();
+  setActiveDock(state.panelOpen ? state.activePanel : 'overview');
+  renderModalPanel();
 }
 
 function renderAll() {
@@ -464,8 +531,9 @@ document.addEventListener('click', (event) => {
   if (!button) return;
   const action = button.dataset.action;
   if (action === 'open-panel') {
-    state.activePanel = button.dataset.panel;
-    renderPanel();
+    openPanelModal(button.dataset.panel);
+  } else if (action === 'close-panel-modal') {
+    closePanelModal();
   } else if (action === 'open-room-picker') {
     openRoomPicker();
   } else if (action === 'close-room-picker') {
@@ -474,7 +542,7 @@ document.addEventListener('click', (event) => {
     selectRoomView(button.dataset.id);
   } else if (action === 'select-room') {
     state.selectedRoom = button.dataset.id;
-    renderPanel();
+    renderModalPanel();
   } else if (action === 'buy-upgrade') {
     buyUpgrade(button.dataset.id);
   } else if (action === 'clean-room') {
