@@ -147,7 +147,8 @@ h2, h3 { letter-spacing: -0.035em; }
 }
 
 @media (max-width: 600px) {
-  #app { width: min(390px, 100%); margin-inline: auto; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  /* iPhone portrait reference frame: 390 x 844, safely shrinking to 375px devices. */
+  #app { width: min(390px, 100%); min-height: 844px; margin-inline: auto; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
   .scene { height: 320px; }
 }
 

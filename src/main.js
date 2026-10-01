@@ -124,7 +124,7 @@ function showArrivalEvent(guestName, roomName) {
   clearTimeout(arrivalEventTimer);
   ui.arrivalEventCopy.textContent = `${guestName} đang đi tới ${roomName}.`;
   ui.arrivalEvent.classList.add('is-visible');
-  arrivalEventTimer = window.setTimeout(() => ui.arrivalEvent.classList.remove('is-visible'), 2600);
+  arrivalEventTimer = window.setTimeout(() => ui.arrivalEvent.classList.remove('is-visible'), 5400);
 }
 
 function canSpend(amount) {
@@ -532,7 +532,7 @@ function createGuestModel(index) {
   addMesh(new THREE.CylinderGeometry(.08, .1, .55, 7), materials.dark, [-.12, .3, 0], group);
   addMesh(new THREE.CylinderGeometry(.08, .1, .55, 7), materials.dark, [.12, .3, 0], group);
   addMesh(new THREE.BoxGeometry(.22, .34, .15), bag, [.36, .92, -.03], group);
-  group.scale.setScalar(.85);
+  group.scale.setScalar(.95);
   return group;
 }
 
@@ -549,7 +549,7 @@ function beginGuestArrival(room) {
     start: new THREE.Vector3(startX, 0, 7.3),
     target: new THREE.Vector3(targetX, 0, 3.55),
     startedAt: performance.now(),
-    duration: 2200,
+    duration: 5000,
     arrived: false,
   };
   group.position.copy(actor.start);
