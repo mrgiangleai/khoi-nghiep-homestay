@@ -191,3 +191,59 @@ h2, h3 { letter-spacing: -0.035em; }
   .starter-grid span { font-size: 8px; }
   .footer-note { text-align: center; line-height: 1.5; }
 }
+
+/* Compact mobile density: keep the complete control surface visible with less scrolling. */
+@media (max-width: 600px) {
+  #app { padding-top: 10px; }
+  .topbar { gap: 10px; }
+  .brand-lockup { gap: 8px; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 10px; font-size: 17px; }
+  .eyebrow { margin-bottom: 2px; font-size: 8px; }
+  h1 { font-size: 16px; }
+  .top-stats { gap: 4px; }
+  .stat-chip { gap: 6px; padding: 6px 7px; border-radius: 11px; }
+  .stat-icon { width: 24px; height: 24px; border-radius: 7px; font-size: 12px; }
+  .stat-label { font-size: 8px; }
+  .stat-chip strong { margin-top: 1px; font-size: 10px; }
+  .next-day-button { min-height: 36px; padding: 8px 12px; font-size: 11px; }
+  .status-bar { gap: 5px; margin: 10px 0 8px; padding: 7px 9px; font-size: 9px; }
+  .status-copy { gap: 6px; }
+  .status-copy strong { font-size: 10px; }
+  .status-hints { gap: 5px; font-size: 8px; }
+  .game-layout { gap: 8px; }
+  .scene { height: 280px; }
+  .scene-title { top: 12px; left: 12px; }
+  .location-pill { padding: 5px 7px; font-size: 8px; }
+  .scene-title h2 { margin: 6px 0 1px; font-size: 30px; }
+  .scene-title p { font-size: 8px; }
+  .scene-legend { right: 7px; bottom: 7px; gap: 4px; padding: 5px 6px; font-size: 7px; }
+  .arrival-event { top: 9px; right: 9px; max-width: 145px; gap: 6px; padding: 6px 7px; border-radius: 10px; }
+  .arrival-icon { flex-basis: 23px; width: 23px; height: 23px; border-radius: 7px; font-size: 12px; }
+  .arrival-event strong { font-size: 8px; }
+  .arrival-event div span { margin-top: 1px; font-size: 8px; }
+  .toast { bottom: 42px; padding: 7px 10px; font-size: 9px; }
+  .panel-content { padding: 12px; }
+  .panel-heading { gap: 8px; padding-bottom: 10px; }
+  .panel-heading h2 { margin-bottom: 2px; font-size: 17px; }
+  .panel-heading p { font-size: 9px; line-height: 1.4; }
+  .panel-heading-icon { width: 30px; height: 30px; border-radius: 9px; font-size: 15px; }
+  .panel-body { padding-top: 10px; }
+  .metric-grid { gap: 5px; margin-bottom: 10px; }
+  .metric-card { padding: 8px; border-radius: 10px; }
+  .metric-card span { font-size: 8px; }
+  .metric-card strong { margin-top: 3px; font-size: 12px; }
+  .section-label { margin-bottom: 6px; font-size: 8px; }
+  .room-list { gap: 6px; }
+  .room-card { gap: 6px; padding: 8px; border-radius: 11px; }
+  .room-card-main { gap: 7px; }
+  .room-icon { width: 28px; height: 28px; border-radius: 8px; font-size: 14px; }
+  .room-card strong { font-size: 10px; }
+  .room-card small { margin-top: 2px; font-size: 8px; }
+  .room-status { padding: 4px 6px; font-size: 8px; }
+  .info-box { gap: 6px; margin-top: 10px; padding: 8px; border-radius: 10px; font-size: 8px; line-height: 1.4; }
+  .info-box > span { font-size: 12px; }
+  .action-dock { gap: 4px; margin-top: 8px; padding: 5px; border-radius: 13px; }
+  .dock-button { min-height: 44px; padding: 6px 3px; font-size: 8px; }
+  .dock-icon { font-size: 14px; }
+  .footer-note { gap: 5px; margin-top: 8px; font-size: 8px; }
+}
