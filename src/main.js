@@ -36,6 +36,8 @@ const ui = {
   startButton: document.querySelector('#start-game-button'),
   nextDayButton: document.querySelector('#next-day-button'),
   toast: document.querySelector('#toast'),
+  arrivalEvent: document.querySelector('#arrival-event'),
+  arrivalEventCopy: document.querySelector('#arrival-event-copy'),
   scene: document.querySelector('#scene'),
 };
 
@@ -56,6 +58,7 @@ const state = {
 };
 
 let toastTimer;
+let arrivalEventTimer;
 
 function money(value) {
   return `${new Intl.NumberFormat('vi-VN').format(Math.round(value))} ₫`;
@@ -117,6 +120,13 @@ function showToast(message, isError = false) {
   toastTimer = window.setTimeout(() => ui.toast.classList.remove('is-visible'), 3200);
 }
 
+function showArrivalEvent(guestName, roomName) {
+  clearTimeout(arrivalEventTimer);
+  ui.arrivalEventCopy.textContent = `${guestName} đang đi tới ${roomName}.`;
+  ui.arrivalEvent.classList.add('is-visible');
+  arrivalEventTimer = window.setTimeout(() => ui.arrivalEvent.classList.remove('is-visible'), 2600);
+}
+
 function canSpend(amount) {
   if (state.money >= amount) return true;
   showToast('Ngân sách chưa đủ cho khoản đầu tư này.', true);
@@ -153,12 +163,16 @@ function checkIn(room) {
     rate,
   };
   room.status = 'occupied';
-  showToast(`${name} vừa check-in ${room.name}.`);
+  beginGuestArrival(room);
+  renderAll();
+  showArrivalEvent(name, room.name);
+  showToast(`${name} đang đi tới ${room.name}.`);
 }
 
 function checkOut(room) {
   const guest = room.guest;
   if (!guest) return;
+  removeGuestActor(room.id);
   addTransaction(guest.rate, `${room.name}: tiền phòng của ${guest.name}`);
   room.guest = null;
   room.status = 'dirty';
@@ -503,6 +517,53 @@ addMesh(new THREE.BoxGeometry(.12, .75, .12), materials.skin, [.48, 1.45, 0], gi
 addMesh(new THREE.CylinderGeometry(.11, .12, .7, 7), materials.dark, [-.19, .35, 0], girl);
 addMesh(new THREE.CylinderGeometry(.11, .12, .7, 7), materials.dark, [.19, .35, 0], girl);
 
+const guestActors = new Map();
+const guestShirtColors = [0x667fa6, 0xd8895e, 0x6f927c, 0x9d6f87, 0xc49a5d, 0x587d91];
+
+function createGuestModel(index) {
+  const group = new THREE.Group();
+  const shirt = new THREE.MeshStandardMaterial({ color: guestShirtColors[index % guestShirtColors.length], roughness: .9 });
+  const skin = new THREE.MeshStandardMaterial({ color: 0xeab08a, roughness: .85 });
+  const hair = new THREE.MeshStandardMaterial({ color: index % 2 ? 0x5a4135 : 0x332b2a, roughness: .95 });
+  const bag = new THREE.MeshStandardMaterial({ color: 0x8b5e4e, roughness: .9 });
+  addMesh(new THREE.CylinderGeometry(.25, .33, .76, 8), shirt, [0, .86, 0], group);
+  addMesh(new THREE.SphereGeometry(.29, 16, 10), skin, [0, 1.55, 0], group);
+  addMesh(new THREE.SphereGeometry(.31, 16, 10), hair, [0, 1.72, -.03], group);
+  addMesh(new THREE.CylinderGeometry(.08, .1, .55, 7), materials.dark, [-.12, .3, 0], group);
+  addMesh(new THREE.CylinderGeometry(.08, .1, .55, 7), materials.dark, [.12, .3, 0], group);
+  addMesh(new THREE.BoxGeometry(.22, .34, .15), bag, [.36, .92, -.03], group);
+  group.scale.setScalar(.85);
+  return group;
+}
+
+function beginGuestArrival(room) {
+  removeGuestActor(room.id);
+  const roomIndex = state.rooms.findIndex((item) => item.id === room.id);
+  const targetX = ROOM_POSITIONS[roomIndex] * .42;
+  const startX = targetX + (roomIndex === 0 ? -2.5 : 2.5);
+  const group = createGuestModel(roomIndex);
+  const actor = {
+    group,
+    guestName: room.guest?.name || 'Khách mới',
+    roomName: room.name,
+    start: new THREE.Vector3(startX, 0, 7.3),
+    target: new THREE.Vector3(targetX, 0, 3.55),
+    startedAt: performance.now(),
+    duration: 2200,
+    arrived: false,
+  };
+  group.position.copy(actor.start);
+  threeScene.add(group);
+  guestActors.set(room.id, actor);
+}
+
+function removeGuestActor(roomId) {
+  const actor = guestActors.get(roomId);
+  if (!actor) return;
+  actor.group.removeFromParent();
+  guestActors.delete(roomId);
+}
+
 function updateRoomMarkers() {
   roomMarkers.forEach((marker, index) => {
     const room = state.rooms[index];
@@ -516,6 +577,21 @@ function updateRoomMarkers() {
 function animateScene(time) {
   girl.position.y = Math.sin(time * 2.1) * .025;
   girl.rotation.y = Math.sin(time * .55) * .025;
+  const now = performance.now();
+  guestActors.forEach((actor) => {
+    const progress = Math.min(1, (now - actor.startedAt) / actor.duration);
+    const eased = progress * progress * (3 - 2 * progress);
+    actor.group.position.lerpVectors(actor.start, actor.target, eased);
+    if (progress < 1) {
+      actor.group.position.y = Math.abs(Math.sin(progress * Math.PI * 6)) * .045;
+      actor.group.rotation.y = Math.sin(progress * Math.PI * 4) * .12;
+    } else if (!actor.arrived) {
+      actor.arrived = true;
+      actor.group.position.y = 0;
+      actor.group.rotation.y = 0;
+      showToast(`${actor.guestName} đã tới ${actor.roomName}.`);
+    }
+  });
   renderer.render(threeScene, camera);
 }
 
